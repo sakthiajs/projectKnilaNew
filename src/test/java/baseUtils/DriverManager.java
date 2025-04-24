@@ -36,7 +36,7 @@ public class DriverManager {
         	options.addArguments("--no-default-browser-check");
         	options.addArguments("--disable-translate");
         	options.addArguments("--disable-features=AutofillServerCommunication");
-            options.addArguments("--incognito");
+            //options.addArguments("--incognito");
 
         	
         	driver = new ChromeDriver(options);

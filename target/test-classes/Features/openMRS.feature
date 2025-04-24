@@ -24,7 +24,9 @@ And I upload a file
 Then I should see a success message for the attachment
 
 Scenario: Capture vitals and BMI calculation
-Given Start Visit Again
+Given Attachment section has attachment
+And Recent Visit has one entry
+And End Visit and Start Visit Again
 When Click on "Capture Vitals" menu
 And I enter vitals data
 Then I should verify the BMI calculation and save the form

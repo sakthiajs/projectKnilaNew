@@ -62,7 +62,7 @@ public class WaitUtils {
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
-    public static Alert waitForAlert(WebDriver driver) {
+    public static Alert waitForAlert(WebDriver driver) { 
         return waitForAlert(driver, DEFAULT_TIMEOUT);
     }
 

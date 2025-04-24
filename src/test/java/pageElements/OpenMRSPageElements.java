@@ -49,8 +49,9 @@ public class OpenMRSPageElements {
 	public By uploadButton = By.xpath("//button[@class='confirm ng-binding']");
 	public By toasterMessage = By.xpath("//*[contains(text(), 'successfully')]");
 	public By backPatientDetails = By.xpath("//i[@class='icon-home small']//following::li/a");
-	public By confirmAttachment = By.xpath("//div[contains(@class, 'att_thumbnail-container ng-scope') and contains(text(), 'xawsa')]");
+	public By confirmAttachment = By.xpath("//*[contains(text(), 'AjFile')]");
 	public By recentVisitLabel = By.xpath("//*[contains(text(), 'RECENT VISITS')]");
+	public By recentVisitEntry =   By.xpath("//*[contains(text(), 'RECENT VISITS')]//following::a[1]");
 	public By confirmRecentVisit = By.xpath("//*[contains(text(), 'RECENT VISITS')]//following::a[1]");
 	public By confirmAttachmentTag = By.xpath("//div[text() = 'Attachment Upload']");
 	public By endVisit = By.xpath("(//div[contains(text(), 'End Visit')])[1]");

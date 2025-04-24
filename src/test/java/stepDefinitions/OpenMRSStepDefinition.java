@@ -99,7 +99,7 @@ public void clicking_the_menu(String menu) {
     public void i_enter_patient_details() throws InterruptedException {
         logger.info("Filling out patient registration form...");
   
-        //WaitUtils.waitForElementVisible(driver, elements.nameLabel, 10).click();
+        
 
         WebElement givenName = WaitUtils.waitForElementVisible(driver, elements.givenName, 10);
         givenName.sendKeys("Sakthivel");
@@ -148,35 +148,35 @@ public void clicking_the_menu(String menu) {
         logger.info("Verifying patient confirmation details...");
 
         try {
-            // Name
+            
             WaitUtils.waitForElementVisible(driver, elements.confirmName, 5);
             String fullNameText = driver.findElement(elements.confirmName).getText();  
             String displayedName = fullNameText.replace("Name: ", "").trim();
             logger.info("Displayed Name: " + displayedName);
             Assert.assertEquals(displayedName, "Sakthivel, Aj", "Name Mismatch");
 
-            // Gender
+            
             WaitUtils.waitForElementVisible(driver, elements.confirmGender, 5);
             String fullGenderText = driver.findElement(elements.confirmGender).getText();  
             String displayedGender = fullGenderText.replace("Gender: ", "").trim();
             logger.info("Displayed Gender: " + displayedGender);
             Assert.assertEquals(displayedGender, "Male", "Gender Mismatch");
 
-            // Birthdate
+            
             WaitUtils.waitForElementVisible(driver, elements.confirmBirthdate, 5);
             String fullBirthdateText = driver.findElement(elements.confirmBirthdate).getText();  
             String displayedBirthDate = fullBirthdateText.replace("Birthdate: ", "").trim();
             logger.info("Displayed Birthdate: " + displayedBirthDate);
             Assert.assertEquals(displayedBirthDate, "05, June, 1997", "BirthDate Mismatch");
 
-            // Address
+            
             WaitUtils.waitForElementVisible(driver, elements.confirmAddress, 5);
             String fullAddressText = driver.findElement(elements.confirmAddress).getText();  
             String displayedAddress = fullAddressText.replace("Address: ", "").trim();
             logger.info("Displayed Address: " + displayedAddress);
             Assert.assertEquals(displayedAddress, "Guga Street, Thirukumaran Nagar, TN, IND, 641057", "Address Mismatch");
 
-            // Phone Number
+            
             WaitUtils.waitForElementVisible(driver, elements.confirmPhoneNumber, 5);
             String fullPhoneText = driver.findElement(elements.confirmPhoneNumber).getText();  
             String displayedPhoneNumber = fullPhoneText.replace("Phone Number: ", "").trim();
@@ -231,8 +231,8 @@ public void The_system_should_calculate_the_age_correctly() {
     	String fullAgeText = driver.findElement(elements.calculatedAge).getText().trim();
     	logger.info("Full Age Text: " + fullAgeText);
 
-    	// Extract just the numeric part (e.g., 27 from "27 year(s) ( 05.Jun.1997)")
-    	String numericPart = fullAgeText.split(" ")[0]; // Splits at the space
+    	
+    	String numericPart = fullAgeText.split(" ")[0];
     	int calculatedAge = Integer.parseInt(numericPart);
 
     	LocalDate birthdate = LocalDate.of(1997, 6, 5);
@@ -255,8 +255,8 @@ public void The_system_should_calculate_the_age_correctly() {
 @Given("Start visit and confirm visit")
 public void start_visit_and_confirm_visit() 
 {
-    driver.findElement(elements.startVisit).click();
-    driver.findElement(elements.confirmVisitButton).click();
+    WaitUtils.waitForElementVisible(driver, elements.startVisit, 10).click();
+    WaitUtils.waitForElementClickable(driver, elements.confirmVisitButton, 10).click();
 }
 
 @When("I click on the {string} menu")
@@ -303,8 +303,8 @@ public void i_upload_a_file() {
         throw new RuntimeException(e);
     }
     
-   WaitUtils.waitForElementVisible(driver, elements.attatchmentCaption, 6).sendKeys("AjFile");
-    WaitUtils.waitForElementVisible(driver, elements.uploadButton, 7).click();
+   WaitUtils.waitForElementVisible(driver, elements.attatchmentCaption, 10).sendKeys("AjFile");
+    WaitUtils.waitForElementVisible(driver, elements.uploadButton, 10).click();
     
     
 }
@@ -335,11 +335,61 @@ public void i_should_see_a_success_message_for_the_attachment() {
 }
 
 
+@Given("Attachment section has attachment")
+public void attachment_section_has_attachment()
+{
+	try {
+	    WebElement attachmentElement = WaitUtils.waitForElementVisible(driver, elements.confirmAttachment, 6);
+	    
+	    String actualMessage = attachmentElement.getText().trim();
+	    String expectedMessage = "AjFile";
 
+	    Assert.assertTrue(actualMessage.contains(expectedMessage),
+	        "Expected attachment text not found. Found: " + actualMessage);
 
-@Given("Start Visit Again")
-public void start_visit_again() {
+	    WaitUtils.waitForElementClickable(driver, elements.backPatientDetails, 6).click();
+
+	} catch (Exception e) {
+	    logger.error("Attachment confirmation element not displayed or incorrect: " + e.getMessage());
+	    ScreenshotUtils.takeScreenshot(driver, "attachment_confirmation_failure");
+	    throw new AssertionError("Attachment confirmation validation failed", e);
+	}
+
+}
+@And("Recent Visit has one entry")
+public void recent_visit_has_one_entry()
+{
+try {
+	    
+	    String expectedMessage = "18.Apr.2025";
+	    
+	
+	    WebElement recentVisitElement = WaitUtils.waitForElementVisible(driver, 
+	        elements.confirmRecentVisit, 10);
+	    
+	    String actualMessage = recentVisitElement.getText().trim();
+
+	 
+	    Assert.assertTrue(actualMessage.contains(expectedMessage), 
+	        "Expected recent visit date not found. Found: " + actualMessage);
+
+	    
+	    WaitUtils.waitForElementClickable(driver, elements.backPatientDetails, 6).click();
+
+	} catch (Exception e) {
+	    logger.error("Recent visit date not displayed or incorrect: " + e.getMessage());
+	    ScreenshotUtils.takeScreenshot(driver, "recent_visit_date_check_failure");
+	    throw new AssertionError("Recent visit date validation failed", e);
+	}
+
+}
+
+@And("End Visit and Start Visit Again")
+public void end_visit_and_start_visit_again() {
     try {
+    	WaitUtils.waitForElementVisible(driver, elements.endVisit, 10).click();
+    	WaitUtils.waitForElementClickable(driver, elements.confirmEndVisit, 10).click();
+    	
         WebElement startVisitBtn = WaitUtils.waitForElementClickable(driver, elements.startVisit, 10);
         startVisitBtn.click();
         WebElement confirmBtn = WaitUtils.waitForElementClickable(driver, elements.confirmVisitButton, 10);
